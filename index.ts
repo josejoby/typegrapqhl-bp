@@ -2,8 +2,8 @@ import { buildSchema } from "type-graphql";
 import "reflect-metadata"
 import { RecipeResolver } from "./recipe-resolver";
 import * as path from "path"
-import { ApolloServer } from "@apollo/server"
-import { startStandaloneServer } from '@apollo/server/standalone';
+const { ApolloServer, gql } = require('apollo-server');
+
 
 async function bootstrap() {
 
@@ -13,15 +13,12 @@ async function bootstrap() {
         emitSchemaFile: path.resolve(__dirname, "schema.gql"),
     });
 
-    const server = new ApolloServer({
-        schema,
-    })
+    const server = new ApolloServer({ schema });
 
-    const { url } = await startStandaloneServer(server, {
-        listen: { port: 4000 },
+    // The `listen` method launches a web server.
+    server.listen().then(({ url }) => {
+    console.log(`🚀  Server ready at ${url}`);
     });
-
-    console.log("server is running at", url);
 
 }
 
